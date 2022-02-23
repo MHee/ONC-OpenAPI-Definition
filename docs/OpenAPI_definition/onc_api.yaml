@@ -1,0 +1,123 @@
+---
+openapi: 3.0.2
+info:
+  title: onc_rest
+  version: 1.0.0
+  description: Test ONC restful
+servers:
+- url: https://data.oceannetworks.ca/api
+  description: Production server.
+paths:
+  /devices:
+    summary: The API locations discovery web service returns all the locations defined
+      in Oceans 2.0 that meet a set of filter criteria.
+    description: |-
+      A location is the parent of an Oceans 2.0 Tree Node from which you can get data. In the Oceans 2.0 Data Search GUI, a location is a Tree Node that contains device categories (Instruments by Location) or properties (Variables by Location) that can be selected to download data. From the Oceans 2.0 perspective, a location is a Search Tree Node that has one or more site devices and/or has one or more primary sensors. If there are multiple instruments of the same device category at a location, child locations or pseudo-nodes will exist and can be pulled from any one of them. Device Categories can be either at the location or at the child-level, whereas Properties (variables) can only be at the location level, due to the Primary Sensor concept, which stitches together data from multiple sensors over time at a location.
+
+      The primary purpose for the locations service is to find locations that have the data you are interested in and use the locationCode when requesting a data product using the dataProductDelivery web service.
+    servers:
+    - url: https://data.oceannetworks.ca
+      description: Production server.
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Test:
+                  value: dfs
+                Ooops:
+                  value: Oooopsy
+          description: Successful call
+      security:
+      - API_Token: []
+    parameters:
+    - examples:
+        get:
+          value: '"some text"'
+      name: method
+      description: "The method: get or getTree"
+      schema:
+        type: string
+      in: query
+      required: true
+  /locations:
+    summary: The API locations discovery web service returns all the locations defined
+      in Oceans 2.0 that meet a set of filter criteria.
+    description: |-
+      A location is the parent of an Oceans 2.0 Tree Node from which you can get data. In the Oceans 2.0 Data Search GUI, a location is a Tree Node that contains device categories (Instruments by Location) or properties (Variables by Location) that can be selected to download data. From the Oceans 2.0 perspective, a location is a Search Tree Node that has one or more site devices and/or has one or more primary sensors. If there are multiple instruments of the same device category at a location, child locations or pseudo-nodes will exist and can be pulled from any one of them. Device Categories can be either at the location or at the child-level, whereas Properties (variables) can only be at the location level, due to the "Primary Sensor" concept, which stitches together data from multiple sensors over time at a location.
+
+      The primary purpose for the locations service is to find locations that have the data you are interested in and use the locationCode when requesting a data product using the dataProductDelivery web service.
+    get:
+      servers:
+      - url: https://data.oceannetworks.ca/api
+        description: Main server
+      tags:
+      - tags
+      - locations
+      parameters:
+      - examples:
+          get:
+            value: get
+        name: method
+        description: The method either get or getTree
+        schema:
+          enum:
+          - get
+          - getTree
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Test:
+                  value: dfs
+                Ooops:
+                  value: Oooopsy
+          description: Successful call
+        "400":
+          $ref: '#/components/responses/test_123'
+      security:
+      - API_Token: []
+      operationId: opereation id???
+      summary: get locations
+      description: Get locations description
+      x-code-samples:
+      - lang: PHP
+        source: |
+          $form = new \PetStore\Entities\Pet();
+          $form->setPetId(1);
+          $form->setPetType("Dog");
+          $form->setName("Rex");
+          // set other fields
+          try {
+              $pet = $client->pets()->update($form);
+          } catch (UnprocessableEntityException $e) {
+              var_dump($e->getErrors());
+          }
+  /rawdata:
+    get:
+      responses:
+        "200":
+          description: Successful response
+      security:
+      - API_Token: []
+components:
+  responses:
+    test_123:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+      description: The description to some response...
+  securitySchemes:
+    API_Token:
+      type: apiKey
+      description: "Get your api token from your [ONC Profile Page](https://data.oceannetworks.ca/Profile)."
+      name: token
+      in: query
