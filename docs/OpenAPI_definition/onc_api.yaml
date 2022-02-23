@@ -3,7 +3,31 @@ openapi: 3.0.2
 info:
   title: onc_rest
   version: 1.0.0
-  description: Test ONC restful
+  description: |+
+    This is my test for an OpenAPI description file that provides documentation and an URL Builder for the Ocean Networks Canada [Oceans 3.0 API](https://wiki.oceannetworks.ca/display/O2A/Oceans+2.0+API+Home).
+
+    This is a more formal documentation and builder that should be versioned and maintained along with the code that implements the API by the ONC Software Team.
+
+    Some more fun and interactive examples could be presented using Streamlit, either hosted by them as this [Streamlit Example](https://share.streamlit.io/mhee/streamlit-example) or directly hosted by ONC.
+
+
+    This example is based on [apicur.io studio](https://www.apicur.io/studio/) to help with the interactive design of the OpenAPI description. The documentation and builder is rendered with [RapiDoc](https://github.com/mrin9/RapiDoc). However, there are many options!
+
+    The [Introduction](https://oai.github.io/Documentation/introduction.html) and [Best Practises](https://oai.github.io/Documentation/introduction.html) pages at OpenAPI give an idea why one should use it and how it is best done.
+
+    Every major player (Google, Twitter, Github, ...) uses OpenAPI descriptions. There is an [Open API Directory](https://github.com/APIs-guru/openapi-directory/) that lists many useful descriptions.
+
+    [This blogpost](https://nordicapis.com/7-open-source-openapi-documentation-generators/) mentions some of the available Documentation Generators. It only mentions a small subset from a long list of [OpenAPI tools](https://openapi.tools/).
+
+
+
+
+
+
+
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
 servers:
 - url: https://data.oceannetworks.ca/api
   description: Production server.
@@ -99,7 +123,43 @@ paths:
               var_dump($e->getErrors());
           }
   /rawdata:
+    summary: "Gets raw data from an instrument from a date, to a date, or between\
+      \ two given dates."
+    description: "If no time is specified, the last hour of data will be returned\
+      \ for getByStation, or the data will be from the beginning of time to the present,\
+      \ subject to (default or otherwise) row and size limits (for getByDevice and\
+      \ getByLocation).\r\n\r\nIf time is specified, the data is limited to 100,000\
+      \ rows."
     get:
+      tags:
+      - Discovery
+      parameters:
+      - name: method
+        description: Select if you want to retrive the data by locationCode and deviceCategoryCode
+          (getBy Location) or by deviceCode (getByDevice).
+        schema:
+          enum:
+          - getByLocation
+          - getByDevice
+          type: string
+        in: query
+        required: true
+      - name: locationCode
+        description: "Return raw data from a specific Location.\r\n\r\nLocation Code\
+          \ must be valid and match exactly, including case.\r\nSpecific Location\
+          \ Codes can be obtained using the locations service.\r\n\r\n*Required*,\
+          \ when using getByLocation."
+        schema:
+          type: string
+        in: query
+      - name: deviceCategoryCode
+        description: "Return raw data belonging to a specific Device Category Code.\r\
+          \n\r\nDevice Category Code must be valid and match exactly, including case.\r\
+          \nSpecific Device Category Codes can be obtained using the deviceCategories\
+          \ service.\r\n\r\n*Required*, when using getByLocation."
+        schema:
+          type: string
+        in: query
       responses:
         "200":
           description: Successful response
